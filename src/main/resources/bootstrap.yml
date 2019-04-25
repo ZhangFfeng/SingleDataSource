@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: SingleDatasource
+  profiles:
+    active: dev
+    #配置服务器地址
+  cloud:
+    config:
+      uri: http://localhost:8888
+      #开启feign 熔断机制
+feign:
+  hystrix:
+    enabled: true
+    #客户端调用超时
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+     #Ribbon配置饥饿加载
+ribbon:
+  eager-load:
+    enabled: true
+    clients: ORGANIZATIONSERVICE
+#解决http://localhost:10003/actuator/hystrix.stream无法访问的问题--暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "hystrix.stream,health"
